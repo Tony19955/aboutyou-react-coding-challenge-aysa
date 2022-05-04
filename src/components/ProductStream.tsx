@@ -10,7 +10,7 @@ interface Props {
 const ProductStream: FC<Props> = ({ products }) => {
   return (
     <Wrapper>
-      {products.map((product) => (
+      {products.map(product => (
         <ProductTile key={product.id} {...product} />
       ))}
     </Wrapper>
@@ -21,14 +21,15 @@ const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: 0 -2.5px;
+  width: 80%;
   > * {
-    width: 50%;
+    width: 25%;
     padding: 10px 2.5px 0;
-    @media (min-width: 768px) {
+    @media (max-width: 768px) {
       width: 33%;
     }
-    @media (min-width: 1024px) {
-      width: 25%;
+    @media (max-width: 1024px) {
+      width: 50%;
     }
   }
 `;
