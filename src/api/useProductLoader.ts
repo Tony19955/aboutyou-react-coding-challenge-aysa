@@ -1,18 +1,20 @@
 import { useCallback } from 'react';
 import { BapiClient } from '@aboutyou/backbone';
-import { APISortOrder } from '@aboutyou/backbone/endpoints/products/products';
 import { useAsyncLoader } from './useAsyncLoader';
 import { normalizeProduct } from './normalizeProduct';
+import { APISortOrder } from '@aboutyou/backbone/endpoints/products/products';
+import { AttributeWithValuesFilter } from '@aboutyou/backbone/types/AttributeOrAttributeValueFilter';
 
 const SHOP_ID = 605;
 const PORT = process.env.PORT || 9459;
-const HOST = `http://0.0.0.0:${PORT}/v1/`;
+const HOST = `http://127.0.0.1:${PORT}/v1/`;
 
-export const useProductLoader = () => {
-  const bapi = new BapiClient({
-    host: HOST,
-    shopId: SHOP_ID,
-  });
+const bapi = new BapiClient({
+  host: HOST,
+  shopId: SHOP_ID,
+});
+
+export const useProductLoader = (attributes: Array<AttributeWithValuesFilter>) => {
 
   const products = useAsyncLoader(
     useCallback(() => {
@@ -20,6 +22,7 @@ export const useProductLoader = () => {
         .query({
           where: {
             categoryId: 20236,
+            attributes: attributes
           },
           pagination: {
             page: 1,
@@ -38,7 +41,7 @@ export const useProductLoader = () => {
           },
         })
         .then((data) => data.entities.map(normalizeProduct));
-    }, []),
+    }, [attributes])
   );
 
   return Array.isArray(products) ? products : [];
